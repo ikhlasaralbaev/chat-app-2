@@ -6,22 +6,22 @@ use App\Http\Requests\StoreChatRoomRequest;
 use App\Http\Requests\UpdateChatRoomRequest;
 use App\Http\Resources\Api\ChatRoomResource;
 use App\Http\Services\Chat\ChatService;
+use App\Http\Services\Chat\RoomService;
 use App\Models\ChatRoom;
+use App\Models\Room;
 
-class ChatRoomController extends Controller
+class RoomController extends Controller
 {
 
-    private $chatService;
 
-    public function __construct(ChatService $_chatService) {
-        $this->chatService = $_chatService;
+    public function __construct(private readonly RoomService $chatService) {
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = ChatRoom::with("created_by")->get();
+        $data = Room::with("created_by")->get();
 
         return ChatRoomResource::collection($data);
     }
@@ -45,7 +45,7 @@ class ChatRoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ChatRoom $chatRoom)
+    public function show(Room $chatRoom)
     {
         //
     }
@@ -53,7 +53,7 @@ class ChatRoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ChatRoom $chatRoom)
+    public function edit(Room $chatRoom)
     {
         //
     }
@@ -61,7 +61,7 @@ class ChatRoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChatRoomRequest $request, ChatRoom $chatRoom)
+    public function update(UpdateChatRoomRequest $request, Room $chatRoom)
     {
         //
     }
@@ -69,7 +69,7 @@ class ChatRoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChatRoom $chatRoom)
+    public function destroy(Room $chatRoom)
     {
         //
     }

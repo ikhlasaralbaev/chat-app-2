@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ChatRoom extends Model
+class Room extends Model
 {
     use HasFactory;
 
@@ -15,10 +15,14 @@ class ChatRoom extends Model
     ];
 
     public function messages(): HasMany {
-        return $this->hasMany(ChatMessage::class, "chat_room_id");
+        return $this->hasMany(Message::class, "chat_room_id");
     }
 
     public function created_by() {
         return $this->belongsTo(User::class, "created_by");
+    }
+
+    public function users() {
+        return $this->belongsToMany(User::class, "user_chat_rooms");
     }
 }

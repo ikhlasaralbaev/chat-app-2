@@ -21,6 +21,7 @@ interface UserServiceInterface {
     public function create($email, $password, $name);
 
     public function findById($id);
+    public function joinToChatRoom($room);
 
     public function findAll();
 }

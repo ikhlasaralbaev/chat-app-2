@@ -6,6 +6,10 @@ use App\Http\Services\Chat\ChatMessageService;
 use App\Http\Services\Chat\ChatMessageServiceInterface;
 use App\Http\Services\Chat\ChatService;
 use App\Http\Services\Chat\ChatServiceInterface;
+use App\Http\Services\Chat\MessageService;
+use App\Http\Services\Chat\MessageServiceInterface;
+use App\Http\Services\Chat\RoomService;
+use App\Http\Services\Chat\RoomServiceInterface;
 use App\Http\Services\ChatMessage\ChatMessageService as ChatMessageChatMessageService;
 use App\Http\Services\User\UserService;
 use App\Http\Services\User\UserServiceInterface;
@@ -31,12 +35,12 @@ class ServiceServiceProvider extends ServiceProvider
             UserService::class
         );
         $this->app->bind(
-            ChatServiceInterface::class,
-            ChatService::class
+            RoomServiceInterface::class,
+            RoomService::class
         );
         $this->app->bind(
-            ChatMessageServiceInterface::class,
-            ChatMessageService::class,
+            MessageServiceInterface::class,
+            MessageService::class,
         );
     }
 }

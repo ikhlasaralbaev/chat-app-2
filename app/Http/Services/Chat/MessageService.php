@@ -6,14 +6,17 @@ namespace App\Http\Services\Chat;
 
 use App\Events\ChatMessageEvent;
 use App\Http\Requests\StoreChatMessageRequest;
+use App\Http\Requests\UpdateChatMessageRequest;
 use App\Http\Resources\Api\ChatMessageResource;
 use App\Models\ChatMessage;
+use App\Models\Message;
+use Exception;
 
-class ChatMessageService implements ChatMessageServiceInterface {
+class MessageService implements MessageServiceInterface {
 
     public function getChatMessages($chat_room_id)
     {
-        $messages = ChatMessage::with(["created_by", "chat_room_id"])->where("chat_room_id", $chat_room_id)->get();
+        $messages = Message::with(["created_by", "room"])->where("room", $chat_room_id)->get();
 
         return ChatMessageResource::collection($messages);
     }
@@ -23,14 +26,30 @@ class ChatMessageService implements ChatMessageServiceInterface {
         $data = $request->validated();
         $user = $request->user();
 
-        $message = ChatMessage::create([
+        $message = Message::create([
             "message" => $data["message"],
-            "chat_room_id" => $data["chat_room_id"],
+            "room" => $data["chat_room_id"],
             "created_by" => $user["id"]
         ]);
 
         // event for pusher, notification
         event(new ChatMessageEvent($data["message"], $data["chat_room_id"]));
+
+        return ["message" => "success", "data" => $message];
+    }
+
+    public function deleteMessage(Message $message) {
+
+            $message->delete();
+
+            return response()->json(["message" => "success"]);
+
+    }
+
+    public function updateMessage(Message $message, UpdateChatMessageRequest $request) {
+
+        $message["message"] = $request->validated()["message"];
+        $message["is_updated"] = true;
 
         return ["message" => "success", "data" => $message];
     }

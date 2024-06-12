@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chat_messages', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->text("message");
             $table->foreignId("created_by")->constrained("users")->onUpdate("cascade")->onDelete("cascade");
-            $table->foreignId("chat_room_id")->constrained("chat_rooms")->onUpdate("cascade")->onDelete("cascade");
+            $table->foreignId("room")->constrained("rooms")->onUpdate("cascade")->onDelete("cascade");
+            $table->boolean("is_updated")->default(false);
             $table->timestamps();
         });
     }

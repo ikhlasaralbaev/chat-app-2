@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ChatMessageController;
-use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,13 +24,17 @@ Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
         Route::post("/profile/{id}", [UserController::class, "show"]);
         Route::delete("/{id}", [UserController::class, "destroy"]);
         Route::put("/{id}", [UserController::class, "update"]);
+        Route::post("/join/{room}", [UserController::class, "joinToChatRoom"]);
+        Route::post("/left/{room}", [UserController::class, "leftFromRoom"]);
     });
 
     Route::prefix("/chats")->name("chat-rooms.")->group(function () {
-        Route::get("/", [ChatRoomController::class, "index"]);
-        Route::post("/", [ChatRoomController::class, "store"]);
-        Route::get("/messages/{id}", [ChatMessageController::class, "index"]);
-        Route::post("/messages/{id}", [ChatMessageController::class, "store"]);
+        Route::get("/", [RoomController::class, "index"]);
+        Route::post("/", [RoomController::class, "store"]);
+        Route::get("/messages/{id}", [MessageController::class, "index"]);
+        Route::post("/messages/{id}", [MessageController::class, "store"]);
+        Route::put("/messages/{message}", [MessageController::class, "update"]);
+        Route::delete("/messages/{message}", [MessageController::class, "destroy"]);
     });
 
     Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

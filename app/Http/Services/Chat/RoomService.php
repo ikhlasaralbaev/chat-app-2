@@ -4,21 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Services\Chat;
 
-use App\Events\Message as MessageEvent;
-use App\Http\Requests\ChatMessageStoreRequest;
 use App\Http\Requests\StoreChatRoomRequest;
-use App\Http\Resources\Api\ChatRoomResource;
-use App\Http\Resources\ChatRoomResource as ResourcesChatRoomResource;
-use App\Models\ChatMessages;
-use App\Models\ChatRoom;
-use Carbon\Carbon;
+use App\Models\Room;
+use App\Models\UserRooms;
 use Exception;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
-class ChatService implements ChatServiceInterface {
+class RoomService implements RoomServiceInterface {
 
     public function getChatWithId($id)
     {
@@ -43,7 +34,7 @@ class ChatService implements ChatServiceInterface {
                 ], 422);
             }
 
-            $newRoom = ChatRoom::create([
+            $newRoom = Room::create([
                 "name" => $data["name"],
                 "type" => $data["type"],
                 "info" => $data["info"],
@@ -59,12 +50,16 @@ class ChatService implements ChatServiceInterface {
 
     public function getChatWithLink($link)
     {
-            $chat = ChatRoom::where("link", $link)->first();
+            $chat = Room::where("link", $link)->first();
             return $chat;
     }
 
-    public function message() {
+    public function userIsExist($roomId, $userId) {
+        $room = UserRooms::where('room_id', $roomId)
+            ->where('user_id', $userId)
+            ->first();
 
+        return $room;
     }
 
 

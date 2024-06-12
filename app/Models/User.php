@@ -46,10 +46,10 @@ class User extends Authenticatable
     ];
 
     public function chat_rooms() {
-        return $this->hasMany(ChatRoom::class, "created_by");
+        return $this->hasMany(Room::class, "created_by");
     }
 
     public function chat_messages() {
-        return $this->hasMany(ChatMessage::class, "created_by");
+        return $this->hasMany(Message::class, "created_by");
     }
 }

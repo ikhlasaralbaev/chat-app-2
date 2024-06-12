@@ -15,10 +15,8 @@ use Illuminate\Validation\UnauthorizedException;
 
 class AuthController extends Controller
 {
-    private $userService;
 
-    public function __construct(private UserUserService $_userService) {
-        $this->userService = $_userService;
+    public function __construct(private readonly UserUserService $userService) {
     }
     /**
      * Store a newly created resource in storage.

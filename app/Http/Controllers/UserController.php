@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Api\UserResource;
+use App\Http\Services\User\UserService;
+use App\Models\Room;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    public function __construct(private readonly UserService $userService) {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -72,4 +78,15 @@ class UserController extends Controller
             return ["message" => "Something went wrong! " . $e->getMessage()];
         }
     }
+
+    public function joinToChatRoom(Room $room) {
+        return $this->userService->joinToChatRoom($room->id);
+    }
+
+
+    public function leftFromRoom(Room $room) {
+        return $this->userService->leftFromRoom($room->id);
+    }
+
+
 }

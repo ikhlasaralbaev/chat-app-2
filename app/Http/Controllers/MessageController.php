@@ -7,6 +7,7 @@ use App\Http\Requests\StoreChatMessageRequest;
 use App\Http\Requests\UpdateChatMessageRequest;
 use App\Http\Services\Chat\MessageService;
 use App\Models\Message;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -27,9 +28,9 @@ class MessageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChatMessageRequest $request)
+    public function store(Room $room, StoreChatMessageRequest $request)
     {
-        return $this->chatMessageService->createMessage($request);
+        return $this->chatMessageService->createMessage($request, $room);
     }
 
 

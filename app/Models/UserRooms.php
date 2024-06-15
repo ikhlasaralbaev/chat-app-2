@@ -3,13 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class UserRooms extends Model
 {
     use HasFactory;
 
+
+    protected $connection = "mongodb";
+    protected $collection = "user_rooms";
+
     protected $guarded = ['id'];
+    protected $hidden = ["chat_room_id", "user_id", "room_id"];
 
     public function user()
     {
@@ -18,7 +23,7 @@ class UserRooms extends Model
 
     public function chat_room()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Room::class, "chat_room_id");
     }
 
 

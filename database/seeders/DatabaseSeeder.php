@@ -6,7 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\ChatMessage;
 use App\Models\ChatRoom;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\User::factory(1)->create();
 
-        User::create(
+        $user = User::create(
             [
                 'name' => "Ikhlas Aralbaev",
                 'email' => "admin@gmail.com",
@@ -30,12 +30,13 @@ class DatabaseSeeder extends Seeder
                 'role' => "admin",
                 "avatar" => fake()->image()
             ]
-        );
+            );
 
         Role::create(["name" => "admin", "guard_name" => "web"]);
         Role::create(["name" => "user", "guard_name" => "web"]);
 
-
+        $role = Role::findByName("admin");
+        $user->assignRole($role);
 
     }
 }

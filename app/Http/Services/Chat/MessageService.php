@@ -11,30 +11,43 @@ use App\Http\Requests\UpdateChatMessageRequest;
 use App\Http\Resources\Api\ChatMessageResource;
 use App\Models\ChatMessage;
 use App\Models\Message;
+use App\Models\Room;
 use Exception;
 
 class MessageService implements MessageServiceInterface {
 
+    public function __construct(private RoomService $roomService) {
+    }
+
     public function getChatMessages($chat_room_id)
     {
-        $messages = Message::with(["created_by", "room"])->where("room", $chat_room_id)->get();
+        $messages = Message::with(["room", "createdBy"])->where("room_id", $chat_room_id)->get();
+
 
         return ChatMessageResource::collection($messages);
     }
 
-    public function createMessage(StoreChatMessageRequest $request)
+    public function createMessage(StoreChatMessageRequest $request, Room $room)
     {
         $data = $request->validated();
         $user = $request->user();
 
+        $userIsExistThisChat = $this->roomService->userIsExist($room->id, $user->id);
+
+        if (!$userIsExistThisChat) {
+            return response([
+                "message" => "User is not exist in this room!",
+            ], 422);
+        }
+
         $message = Message::create([
             "message" => $data["message"],
-            "room" => $data["chat_room_id"],
-            "created_by" => $user["id"]
+            "room_id" => $room->id,
+            "user_id" => $user->id
         ]);
 
         // event for pusher, notification
-        event(new ChatMessageEvent($message, $data["chat_room_id"], "create_message"));
+        event(new ChatMessageEvent($message, $room["id"], "create_message"));
 
         return ["message" => "success", "data" => $message];
     }

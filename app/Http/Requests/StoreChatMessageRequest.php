@@ -23,7 +23,6 @@ class StoreChatMessageRequest extends FormRequest
     {
         return [
             "message" => "string|required",
-            "chat_room_id" => "string|required"
         ];
     }
 }

@@ -18,7 +18,7 @@ Route::prefix('/auth')->name("auth.")->group(function() {
 });
 
 
-Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
+Route::middleware("role:admin")->group(function () {
     Route::prefix('/users')->name("users.")->group(function() {
         Route::get("/", [UserController::class, "index"]);
         Route::post("/", [UserController::class, "store"]);
@@ -33,7 +33,7 @@ Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
         Route::get("/", [RoomController::class, "index"]);
         Route::post("/", [RoomController::class, "store"]);
         Route::get("/messages/{id}", [MessageController::class, "index"]);
-        Route::post("/messages/{id}", [MessageController::class, "store"]);
+        Route::post("/messages/{room}", [MessageController::class, "store"]);
         Route::put("/messages/{message}", [MessageController::class, "update"]);
         Route::delete("/messages/{message}", [MessageController::class, "destroy"]);
         Route::get("/subscribed", [RoomController::class, "subscribed"]);
@@ -42,10 +42,6 @@ Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
     Route::prefix("/files")->name("file.")->group(function () {
         Route::post("/upload", [FileController::class, "store"]);
         Route::get("/", [FileController::class, "index"]);
-    });
-
-    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-        return $request->user();
     });
 
 });

@@ -20,58 +20,16 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $data = Room::with("created_by")->get();
+        $data = Room::with(["createdBy"])->get();
 
         return ChatRoomResource::collection($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreChatRoomRequest $request)
     {
         return $this->chatService->createChatRoom($request);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Room $chatRoom)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Room $chatRoom)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateChatRoomRequest $request, Room $chatRoom)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Room $chatRoom)
-    {
-        //
-    }
 
     public function subscribed(Request $request)
     {

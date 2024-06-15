@@ -7,5 +7,5 @@ use App\Models\Room;
 
 interface MessageServiceInterface {
     public function getChatMessages(Room $room);
-    public function createMessage(StoreChatMessageRequest $request);
+    public function createMessage(StoreChatMessageRequest $request, Room $room);
 }

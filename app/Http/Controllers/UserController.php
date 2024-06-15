@@ -80,7 +80,7 @@ class UserController extends Controller
     }
 
     public function joinToChatRoom(Room $room) {
-        return $this->userService->joinToChatRoom($room->id);
+        return $this->userService->joinToChatRoom($room);
     }
 
 

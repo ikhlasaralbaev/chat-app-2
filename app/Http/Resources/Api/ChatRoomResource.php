@@ -7,6 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ChatRoomResource extends JsonResource
 {
+
+
+
     /**
      * Transform the resource into an array.
      *

@@ -13,6 +13,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+    protected $connection = "mysql";
+    protected $table = "users";
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,7 +48,7 @@ class User extends Authenticatable
     ];
 
     public function chat_rooms() {
-        return $this->hasMany(Room::class, "created_by");
+        return $this->hasMany(Room::class, "user_id");
     }
 
     public function chat_messages() {

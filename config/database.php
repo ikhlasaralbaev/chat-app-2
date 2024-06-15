@@ -63,6 +63,19 @@ return [
             ]) : [],
         ],
 
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_MONGO', '127.0.0.1'),
+            'port' => env('DB_PORT_MONGO', '3306'),
+            'database' => env('DB_DATABASE_MONGO', 'forge'),
+            'username' => env('DB_USERNAME_MONGO', 'forge'),
+            'password' => env('DB_PASSWORD_MONGO', ''),
+            'options' => [
+                "database" => "admin"
+            ]
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

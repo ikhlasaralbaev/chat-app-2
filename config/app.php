@@ -165,15 +165,11 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
         App\Providers\ServiceServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
-        MongoDB\Laravel\MongoDBServiceProvider::class,
-
 
 
     ])->toArray(),

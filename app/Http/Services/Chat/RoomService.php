@@ -42,7 +42,7 @@ class RoomService implements RoomServiceInterface {
                 "type" => $data["type"],
                 "info" => $data["info"],
                 "link" => $data["link"],
-                "created_by" => $user["id"],
+                "user_id" => $user["id"],
             ]);
 
             return ["data" => $newRoom, "message" => "success"];
@@ -66,8 +66,7 @@ class RoomService implements RoomServiceInterface {
     }
 
     public function subscribed($userId) {
-        $userRooms = UserRooms::where('user_id', $userId)->with('chat_room')->get();
-
+        $userRooms = UserRooms::with(["chat_room", "user"])->where('user_id', $userId)->paginate();
 
         return ChatRoomResource::collection($userRooms);
     }

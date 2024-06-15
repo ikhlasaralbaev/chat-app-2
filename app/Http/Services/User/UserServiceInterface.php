@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Http\Services\User;
 
 use App\Http\Resources\Api\UserResource;
+use App\Models\Room;
 use App\Models\User;
 
 interface UserServiceInterface {
@@ -21,7 +22,7 @@ interface UserServiceInterface {
     public function create($email, $password, $name);
 
     public function findById($id);
-    public function joinToChatRoom($room);
+    public function joinToChatRoom(Room $room);
 
     public function findAll();
 }

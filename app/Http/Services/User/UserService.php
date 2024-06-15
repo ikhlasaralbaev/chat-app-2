@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Services\User;
 
 use App\Http\Services\Chat\RoomService;
+use App\Models\Room;
 use App\Models\User;
 use App\Models\UserRooms;
 use Exception;
@@ -55,19 +56,22 @@ class UserService implements UserServiceInterface {
         return $newUser;
     }
 
-    public function joinToChatRoom($room) {
-        $oldJoin = $this->roomService->userIsExist($room, auth()->id());
+    public function joinToChatRoom(Room $room) {
+        $oldJoin = $this->roomService->userIsExist($room->id, auth()->id());
 
         if ($oldJoin) {
             return response(["message" => "User is already exist in this room!"], 422);
         }
 
-        $room = UserRooms::create([
+        $newroom = UserRooms::create([
             'user_id' => auth()->id(),
-            'chat_room' => $room,
+            'room_id' => $room->id,
+            'chat_room_id' => $room->id
         ]);
 
-        return ["message" => "success", "data" => $room];
+        $newroom->load("chat_room")->load("user");
+
+        return ["message" => "success", "data" => $newroom];
     }
 
     public function leftFromRoom($room) {

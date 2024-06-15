@@ -64,7 +64,7 @@ class UserService implements UserServiceInterface {
 
         $room = UserRooms::create([
             'user_id' => auth()->id(),
-            'room_id' => $room,
+            'chat_room' => $room,
         ]);
 
         return ["message" => "success", "data" => $room];

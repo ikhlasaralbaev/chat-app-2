@@ -11,8 +11,8 @@
                 cluster: 'ap2'
                 });
 
-                var channel = pusher.subscribe('my-channel');
-                channel.bind('my-channel', function(data) {
+                var channel = pusher.subscribe('room.1');
+                channel.bind('room.1', function(data) {
                 alert(JSON.stringify(data));
                 });
     </script>

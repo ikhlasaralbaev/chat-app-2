@@ -1,27 +1,42 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
-RUN apt-get update && apt-get install -y libmcrypt-dev libpng-dev mariadb-client \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libgd-dev \
-    && docker-php-ext-install pdo_mysql
+RUN apt-get update && apt-get install -y \
+        apt-utils \
+        libpq-dev \
+        libpng-dev \
+        libjpeg-dev \
+        libzip-dev \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libgd-dev \
+        jpegoptim optipng pngquant gifsicle \
+        libonig-dev \
+        libxml2-dev \
+        zip unzip \
+        git && \
+        docker-php-ext-install pdo_mysql && \
+        docker-php-ext-install bcmath && \
+        docker-php-ext-install gd && \
+        docker-php-ext-install zip && \
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists/* /mysql-data/* /var/mysql-data/*
 
-RUN docker-php-ext-configure exif
-RUN docker-php-ext-install exif
-RUN docker-php-ext-enable exif
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-webp=/usr/include/  --with-jpeg=/usr/include/
-RUN docker-php-ext-install -j$(nproc) gd
-
-RUN apt install jpegoptim optipng pngquant gifsicle libavif-bin -y
-
-RUN apt-get install -y wget unzip curl
-RUN curl -sS https://getcomposer.org/installer |php
-RUN mv composer.phar /usr/local/bin/composer
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN echo "extension=mongodb.so" >> /usr/local/etc/php/php.ini
 
 COPY ./conf.d /usr/local/etc/php/conf.d/
+
+RUN curl -sS https://getcomposer.org/installer | php -- \
+     --install-dir=/usr/local/bin --filename=composer
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 
 WORKDIR /var/www
 

@@ -172,6 +172,8 @@ return [
         App\Providers\ServiceServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
+        MongoDB\Laravel\MongoDBServiceProvider::class,
+
 
 
     ])->toArray(),

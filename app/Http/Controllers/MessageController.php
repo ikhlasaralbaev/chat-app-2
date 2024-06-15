@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DestroyMessageRequest;
 use App\Http\Requests\StoreChatMessageRequest;
 use App\Http\Requests\UpdateChatMessageRequest;
 use App\Http\Services\Chat\MessageService;
 use App\Models\Message;
+use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
@@ -42,8 +44,9 @@ class MessageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Message $message)
+    public function destroy(Message $message, DestroyMessageRequest $request)
     {
-        return $this->chatMessageService->deleteMessage($message);
+        return $this->chatMessageService->deleteMessage($message, $request);
     }
+
 }

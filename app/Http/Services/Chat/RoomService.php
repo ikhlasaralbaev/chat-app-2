@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Services\Chat;
 
 use App\Http\Requests\StoreChatRoomRequest;
+use App\Http\Resources\Api\ChatRoomResource;
 use App\Models\Room;
 use App\Models\UserRooms;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoomService implements RoomServiceInterface {
 
@@ -60,6 +63,13 @@ class RoomService implements RoomServiceInterface {
             ->first();
 
         return $room;
+    }
+
+    public function subscribed($userId) {
+        $userRooms = UserRooms::where('user_id', $userId)->with('chat_room')->get();
+
+
+        return ChatRoomResource::collection($userRooms);
     }
 
 

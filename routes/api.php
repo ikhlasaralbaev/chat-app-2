@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
@@ -35,6 +36,12 @@ Route::middleware(['auth:sanctum', "role:admin"])->group(function () {
         Route::post("/messages/{id}", [MessageController::class, "store"]);
         Route::put("/messages/{message}", [MessageController::class, "update"]);
         Route::delete("/messages/{message}", [MessageController::class, "destroy"]);
+        Route::get("/subscribed", [RoomController::class, "subscribed"]);
+    });
+
+    Route::prefix("/files")->name("file.")->group(function () {
+        Route::post("/upload", [FileController::class, "store"]);
+        Route::get("/", [FileController::class, "index"]);
     });
 
     Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChatRoomRequest;
 use App\Http\Requests\UpdateChatRoomRequest;
 use App\Http\Resources\Api\ChatRoomResource;
-use App\Http\Services\Chat\ChatService;
 use App\Http\Services\Chat\RoomService;
-use App\Models\ChatRoom;
 use App\Models\Room;
+use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
@@ -72,5 +71,11 @@ class RoomController extends Controller
     public function destroy(Room $chatRoom)
     {
         //
+    }
+
+    public function subscribed(Request $request)
+    {
+        $userId = $request->user()->id;
+        return $this->chatService->subscribed($userId);
     }
 }

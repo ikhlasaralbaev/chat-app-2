@@ -18,7 +18,7 @@ Route::prefix('/auth')->name("auth.")->group(function() {
 });
 
 
-Route::middleware("role:admin")->group(function () {
+Route::middleware(["auth:sanctum", "role:admin|user"])->group(function () {
     Route::prefix('/users')->name("users.")->group(function() {
         Route::get("/", [UserController::class, "index"]);
         Route::post("/", [UserController::class, "store"]);
@@ -27,16 +27,18 @@ Route::middleware("role:admin")->group(function () {
         Route::put("/{id}", [UserController::class, "update"]);
         Route::post("/join/{room}", [UserController::class, "joinToChatRoom"]);
         Route::post("/left/{room}", [UserController::class, "leftFromRoom"]);
+        Route::get("subscribed-rooms", [RoomController::class, "subscribed"]);
     });
 
     Route::prefix("/chats")->name("chat-rooms.")->group(function () {
         Route::get("/", [RoomController::class, "index"]);
+        Route::get("/{room}", [RoomController::class, "show"]);
         Route::post("/", [RoomController::class, "store"]);
+
         Route::get("/messages/{id}", [MessageController::class, "index"]);
         Route::post("/messages/{room}", [MessageController::class, "store"]);
         Route::put("/messages/{message}", [MessageController::class, "update"]);
         Route::delete("/messages/{message}", [MessageController::class, "destroy"]);
-        Route::get("/subscribed", [RoomController::class, "subscribed"]);
     });
 
     Route::prefix("/files")->name("file.")->group(function () {

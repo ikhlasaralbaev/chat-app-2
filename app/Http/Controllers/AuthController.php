@@ -30,7 +30,7 @@ class AuthController extends Controller
 
         $token = $newUser->createToken($newUser['name'], ['user'])->plainTextToken;
 
-        $newUser->assignRole("admin");
+        $newUser->assignRole("user");
 
         return [
             'user' => $newUser,

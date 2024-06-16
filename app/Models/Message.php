@@ -27,4 +27,8 @@ class Message extends Model
         return $this->belongsTo(User::class, "user_id");
     }
 
+    public function userRoom() {
+        return $this->belongsTo(UserRooms::class, "user_room");
+    }
+
 }

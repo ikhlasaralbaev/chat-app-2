@@ -36,4 +36,9 @@ class ChatMessageEvent implements ShouldBroadcast
     {
         return new Channel("room.".$this->chat_room_id);
     }
+
+    public function broadcastAs()
+    {
+        return 'message';
+    }
 }

@@ -6,6 +6,7 @@ namespace App\Http\Services\Chat;
 
 use App\Http\Requests\StoreChatRoomRequest;
 use App\Http\Resources\Api\ChatRoomResource;
+use App\Models\Message;
 use App\Models\Room;
 use App\Models\UserRooms;
 use Exception;
@@ -14,9 +15,9 @@ use Illuminate\Support\Facades\Auth;
 
 class RoomService implements RoomServiceInterface {
 
-    public function getChatWithId($id)
+    public function getChatWithId(Room $room)
     {
-
+        return ChatRoomResource::make($room);
     }
 
     public function getAllChats()
@@ -66,7 +67,8 @@ class RoomService implements RoomServiceInterface {
     }
 
     public function subscribed($userId) {
-        $userRooms = UserRooms::with(["chat_room", "user"])->where('user_id', $userId)->paginate();
+        $userRooms = UserRooms::with(["chat_room", "user", "messages"])->where('user_id', $userId)->paginate();
+
 
         return ChatRoomResource::collection($userRooms);
     }

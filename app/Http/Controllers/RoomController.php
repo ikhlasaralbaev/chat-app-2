@@ -25,6 +25,11 @@ class RoomController extends Controller
         return ChatRoomResource::collection($data);
     }
 
+    public function show(Room $room)
+    {
+        return $this->chatService->getChatWithId($room);
+    }
+
     public function store(StoreChatRoomRequest $request)
     {
         return $this->chatService->createChatRoom($request);

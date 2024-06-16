@@ -26,5 +26,8 @@ class UserRooms extends Model
         return $this->belongsTo(Room::class, "chat_room_id");
     }
 
+    public function messages() {
+        return $this->belongsTo(Message::class, "message_id");
+    }
 
 }

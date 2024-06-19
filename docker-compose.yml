@@ -1,107 +1,68 @@
 services:
     nginx:
-        build:
-            context: ./docker/nginx
-            dockerfile: Dockerfile
+        image: nginx:latest
         volumes:
-            - ./:/var/www
-        environment:
-            - "DB_PORT=3306"
-            - "DB_HOST=mysql"
-            - "XDG_CONFIG_HOME=/app"
+            - ./:/var/www/
+            - ./_docker/images/nginx/conf.d/:/etc/nginx/conf.d/
         ports:
-            - "8080:80"
-        links:
-            - php-fpm
-            - node
-
-    php-fpm:
+            - "8000:80"
+        container_name: nginx
+        depends_on:
+            - php
+    php:
         build:
-            context: ./docker/php-fpm
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: ./_docker/images/php/Dockerfile
         volumes:
-            - ./:/var/www
-        environment:
-            - "DB_PORT=3306"
-            - "DB_HOST=mysql"
-            - "REDIS_PORT=6379"
-            - "REDIS_HOST=redis"
-        links:
+            - ./:/var/www/
+        depends_on:
             - mysql
-            - node
-
-    php-cli:
-        build:
-            context: ./
-            dockerfile: docker/php-cli.docker
-        volumes:
-            - ./:/var/www
-        environment:
-            - "DB_PORT=3306"
-            - "DB_HOST=mysql"
-            - "COMPOSER_MEMORY_LIMIT=-1"
-        links:
-            - mysql
-        tty: true
-
+        container_name: php
     mysql:
-        image: mysql:8.0
+        image: mysql:8.2.0
+        restart: always
         volumes:
-            - database:/var/lib
-        environment:
-            - "MYSQL_ROOT_PASSWORD=secret"
-            - "MYSQL_USER=user"
-            - "MYSQL_PASSWORD=secret"
-            - "MYSQL_DATABASE=chatapp"
+            - ./_docker/data/mysql:/var/lib/mysql
         ports:
-            - "33061:3306"
+            - "3306:3306"
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --log_bin_trust_function_creators=1
+        env_file:
+            - ./_docker/images/mysql/mysql.env
+        container_name: mysql
+
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
+        container_name: pma
+        links:
+            - mysql
         environment:
-            - PMA_HOST=mysql
-            - PMA_USER=user
-            - PMA_PASSWORD=secret
-            - UPLOAD_LIMIT=64M
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
         restart: always
         ports:
-            - 8081:80
-    node:
-        image: node:18-alpine
+            - "8081:80"
+    redis:
+        image: redis:latest
+        restart: always
         ports:
-            - "3000:3000"
+            - "6379:6379"
         volumes:
-            - ./:/var/www
-        working_dir: /var/www
-        tty: true
-
+            - ./_docker/data/redis:/data
+        environment:
+            REDIS_PASSWORD: 12345
+            REDIS_PORT: 6379
+            REDIS_DATABASES: 16
+        container_name: redis
     mongodb:
         image: mongo:latest
-        container_name: mongodb
         environment:
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=root
-            - MONGO_INITDB_DATABASE=chatapp
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+            MONGO_INITDB_DATABASE: chatapp
         ports:
             - "27017:27017"
         volumes:
-            - ./docker/data/mongo:/data/db
+            - ./_docker/data/mongodb:/data/db
         restart: always
-
-    mongo-express:
-        image: mongo-express
-        container_name: mongo-express
-        environment:
-            - ME_CONFIG_MONGODB_SERVER=mongodb
-            - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-            - ME_CONFIG_MONGODB_ADMINPASSWORD=root
-            - ME_CONFIG_BASICAUTH_USERNAME=root
-            - ME_CONFIG_BASICAUTH_PASSWORD=root
-        ports:
-            - "8082:8081"
-        restart: always
-        depends_on:
-            - mongodb
-
-volumes:
-    database:
+        container_name: mongodb

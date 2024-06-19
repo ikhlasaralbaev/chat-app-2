@@ -23,3 +23,10 @@ Default user
 -- password: password
 
 Real key, port, hosts in .env.example file.
+
+Project port: http://localhost:8080
+<br/> 
+Mongo express port: http://localhost:8082
+<br/> 
+Phpmyadmin port: http://localhost:8081
+<br/> 

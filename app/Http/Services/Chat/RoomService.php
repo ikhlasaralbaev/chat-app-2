@@ -81,6 +81,20 @@ class RoomService implements RoomServiceInterface {
         return ChatRoomResource::collection($userRooms);
     }
 
+    public function search($request) {
+        $query = $request->input('search');
+
+        if (!$query) {
+            return response()->json(['error' => 'Search parameter is required'], 400);
+        }
+
+        $rooms = Room::with(["chat_room", "user", "messages"])->where('name', 'like', '%' . $query . '%')
+                            ->orWhere('link', 'like', '%' . $query . '%')
+                            ->get();
+
+        return response()->json($rooms);
+    }
+
 
 
 

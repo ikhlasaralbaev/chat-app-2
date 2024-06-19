@@ -4,9 +4,12 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Room;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use App\Models\UserRooms;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -27,14 +30,15 @@ class DatabaseSeeder extends Seeder
                 'remember_token' => "123123123",
                 'role' => "admin",
                 "avatar" => fake()->image()
-            ]
-            );
+            ]);
 
         Role::create(["name" => "admin", "guard_name" => "web"]);
         Role::create(["name" => "user", "guard_name" => "web"]);
 
         $role = Role::findByName("admin");
         $user->assignRole($role);
+
+
 
     }
 }

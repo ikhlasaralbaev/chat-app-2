@@ -28,19 +28,20 @@ Route::middleware(["auth:sanctum", "role:admin|user"])->group(function () {
         Route::put("/{id}", [UserController::class, "update"]);
         Route::post("/join/{room}", [UserController::class, "joinToChatRoom"]);
         Route::post("/left/{room}", [UserController::class, "leftFromRoom"]);
-        Route::get("subscribed-rooms", [RoomController::class, "subscribed"]);
+        Route::get("/subscribed-rooms", [RoomController::class, "subscribed"]);
     });
 
-    Route::prefix("/chats")->name("chat-rooms.")->group(function () {
+    Route::prefix("/chats")->name("chats.")->group(function () {
+        Route::get("/search-rooms", [RoomController::class, "search"]);
         Route::get("/", [RoomController::class, "index"]);
         Route::get("/{room}", [RoomController::class, "show"]);
         Route::post("/", [RoomController::class, "store"]);
-
         Route::get("/messages/{id}", [MessageController::class, "index"]);
         Route::post("/messages/{room}", [MessageController::class, "store"]);
         Route::put("/messages/{message}", [MessageController::class, "update"]);
         Route::delete("/messages/{message}", [MessageController::class, "destroy"]);
     });
+
 
     Route::prefix("/files")->name("file.")->group(function () {
         Route::post("/upload", [FileController::class, "store"]);

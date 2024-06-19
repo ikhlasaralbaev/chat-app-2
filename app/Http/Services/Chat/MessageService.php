@@ -54,21 +54,21 @@ class MessageService implements MessageServiceInterface {
         $message->load(["createdBy", "room", "repliedMessage.createdBy", "replies", "file"]);
 
         // event for pusher, notification
-        event(new ChatMessageEvent($message, $room["id"], "create_message"));
+        event(new ChatMessageEvent($message, $room["id"], "message"));
 
         return ["message" => "success", "data" => $message];
     }
 
     public function deleteMessage(Message $message, DestroyMessageRequest $request) {
-
-            $message->delete();
-
+            $msg = $message;
             // event for pusher, notification
         event(new ChatMessageEvent(
-            $message->id,
+            $msg,
        $request->validated()["room_id"],
              "delete_message"
             ));
+            $message->delete();
+
 
             return response()->json(["message" => "success"]);
 
@@ -78,13 +78,14 @@ class MessageService implements MessageServiceInterface {
 
         $message["message"] = $request->validated()["message"];
         $message["is_updated"] = true;
+        $message->save();
 
-            // event for pusher, notification
-            event(new ChatMessageEvent(
-                $message->$message,
-           $message->room,
-                 "update_message"
-                ));
+        // event for pusher, notification
+        event(new ChatMessageEvent(
+            $message,
+       $message["room_id"],
+             "update_message"
+            ));
 
         return ["message" => "success", "data" => $message];
     }

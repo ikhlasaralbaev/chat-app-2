@@ -39,6 +39,6 @@ class ChatMessageEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'message';
+        return $this->action;
     }
 }

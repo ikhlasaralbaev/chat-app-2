@@ -41,4 +41,8 @@ class RoomController extends Controller
         $userId = $request->user()->id;
         return $this->chatService->subscribed($userId);
     }
+
+    public function search(Request $request) {
+        return $this->chatService->search($request);
+    }
 }

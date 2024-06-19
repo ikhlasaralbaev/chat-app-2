@@ -16,8 +16,10 @@ MIGRATE PROJECT
 php artisan migrate:fresh --seed
 ```
 
-Default user 
-  <br />
-  -- login: admin@gmail.com
-  <br />
-  -- password: password
+Default user
+<br />
+-- login: admin@gmail.com
+<br />
+-- password: password
+
+Real key, port, hosts in .env.example file.

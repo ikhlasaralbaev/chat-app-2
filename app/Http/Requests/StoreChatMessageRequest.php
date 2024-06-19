@@ -23,6 +23,8 @@ class StoreChatMessageRequest extends FormRequest
     {
         return [
             "message" => "string|required",
+            'replied_message_id' => 'nullable',
+            "file_id" => "nullable|exists:files,id"
         ];
     }
 }

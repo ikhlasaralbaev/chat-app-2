@@ -12,7 +12,7 @@ class Message extends Model
     protected $connection = "mongodb";
     protected $collection = "messages";
 
-    protected $fillable = ["message", "createdBy", "room_id", "is_updated", "user_id"];
+    protected $fillable = ["message", "createdBy", "room_id", "is_updated", "user_id", "replied_message_id", "file_id"];
     protected $hidden = ["user_id", "room_id"];
 
     protected $casts = [
@@ -31,4 +31,17 @@ class Message extends Model
         return $this->belongsTo(UserRooms::class, "user_room");
     }
 
+    public function repliedMessage()
+    {
+        return $this->belongsTo(Message::class, 'replied_message_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Message::class, 'replied_message_id');
+    }
+
+    public function file() {
+        return $this->belongsTo(File::class, "file_id");
+    }
 }

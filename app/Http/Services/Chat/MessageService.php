@@ -21,7 +21,7 @@ class MessageService implements MessageServiceInterface {
 
     public function getChatMessages($chat_room_id)
     {
-        $messages = Message::with(["room", "createdBy"])->where("room_id", $chat_room_id)->get();
+        $messages = Message::with(["room", "createdBy", "repliedMessage.createdBy", "replies", "file"])->where("room_id", $chat_room_id)->get();
 
 
         return ChatMessageResource::collection($messages);
@@ -40,13 +40,18 @@ class MessageService implements MessageServiceInterface {
             ], 422);
         }
 
-        $message = Message::create([
+        $data = array_merge($request->validated(), [
             "message" => $data["message"],
             "room_id" => $room->id,
-            "user_id" => $user->id
+            "user_id" => $user->id,
+            'replied_message_id' => $request->input('replied_message_id', null),
+            'file_id' => $request->input('file_id', null),
         ]);
 
-        $message->load(["createdBy", "room"]);
+        $message = Message::create($data);
+
+
+        $message->load(["createdBy", "room", "repliedMessage.createdBy", "replies"]);
 
         // event for pusher, notification
         event(new ChatMessageEvent($message, $room["id"], "create_message"));

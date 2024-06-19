@@ -13,6 +13,8 @@ use App\Http\Services\Chat\MessageServiceInterface;
 use App\Http\Services\Chat\RoomService;
 use App\Http\Services\Chat\RoomServiceInterface;
 use App\Http\Services\ChatMessage\ChatMessageService as ChatMessageChatMessageService;
+use App\Http\Services\File\FileService as FileFileService;
+use App\Http\Services\File\FileServiceInterface as FileFileServiceInterface;
 use App\Http\Services\User\UserService;
 use App\Http\Services\User\UserServiceInterface;
 use Illuminate\Support\ServiceProvider;
@@ -45,8 +47,8 @@ class ServiceServiceProvider extends ServiceProvider
             MessageService::class,
         );
         $this->app->bind(
-            FileServiceInterface::class,
-            FileService::class,
+            FileFileServiceInterface::class,
+            FileFileService::class,
         );
     }
 }

@@ -24,7 +24,6 @@ class StoreChatRoomRequest extends FormRequest
         return [
             "name" => "required|string|max:255",
             "info" => "required|string|max:255",
-            "type" => "required|string",
             "link" => "required|string|max:50"
         ];
     }

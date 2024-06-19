@@ -6,6 +6,7 @@ namespace App\Http\Services\Chat;
 
 use App\Http\Requests\StoreChatRoomRequest;
 use App\Http\Resources\Api\ChatRoomResource;
+use App\Http\Services\User\UserService;
 use App\Models\Message;
 use App\Models\Room;
 use App\Models\UserRooms;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RoomService implements RoomServiceInterface {
+
 
     public function getChatWithId(Room $room)
     {
@@ -40,11 +42,17 @@ class RoomService implements RoomServiceInterface {
 
             $newRoom = Room::create([
                 "name" => $data["name"],
-                "type" => $data["type"],
                 "info" => $data["info"],
                 "link" => $data["link"],
                 "user_id" => $user["id"],
             ]);
+
+            UserRooms::create([
+                'user_id' => auth()->id(),
+                'room_id' => $newRoom->id,
+                'chat_room_id' => $newRoom->id
+            ]);
+
 
             return ["data" => $newRoom, "message" => "success"];
         } catch (Exception $e) {

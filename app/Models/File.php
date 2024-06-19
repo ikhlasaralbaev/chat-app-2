@@ -9,5 +9,7 @@ class File extends Model
 {
     use HasFactory;
 
+    protected $connection = "mysql";
+
     protected $fillable = ["path"];
 }

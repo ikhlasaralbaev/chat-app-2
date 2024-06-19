@@ -42,18 +42,7 @@ services:
         restart: always
         ports:
             - "8081:80"
-    redis:
-        image: redis:latest
-        restart: always
-        ports:
-            - "6379:6379"
-        volumes:
-            - ./_docker/data/redis:/data
-        environment:
-            REDIS_PASSWORD: 12345
-            REDIS_PORT: 6379
-            REDIS_DATABASES: 16
-        container_name: redis
+
     mongodb:
         image: mongo:latest
         environment:

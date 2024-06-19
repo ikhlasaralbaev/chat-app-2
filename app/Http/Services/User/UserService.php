@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Services\User;
 
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Services\Chat\RoomService;
 use App\Models\Room;
 use App\Models\User;
 use App\Models\UserRooms;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -84,6 +87,21 @@ class UserService implements UserServiceInterface {
         $oldJoin->delete();
 
         return ["message" => "success"];
+    }
+
+    public function updateProfile(UpdateProfileRequest $request) {
+        $user = Auth::user();
+
+        if (!$user) {
+            return new UnauthorizedException();
+        };
+
+        $user->name = $request->validated()["name"];
+        $user->avatar = $request->validated()["avatar"];
+        // Update more fields as needed
+        $user->save();
+
+        return response(["message" => "success", "user" => $user], 200);
     }
 
 

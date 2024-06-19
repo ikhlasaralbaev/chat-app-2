@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string("path");
+            $table->string("size");
+            $table->string("name");
+            $table->string("type");
             $table->timestamps();
         });
     }

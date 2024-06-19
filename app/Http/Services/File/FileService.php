@@ -10,12 +10,19 @@ use App\Models\File;
 class FileService implements FileServiceInterface {
     public function upload(UploadFileRequest $request)
     {
-        $request->validated();
-
         $file = $request->file('file');
-        $path = $file->store('uploads', 'public');
+        $originalName = $file->getClientOriginalName(); // Get original file name
+        $size = $file->getSize(); // Get file size in bytes
+        $type = $file->getClientMimeType(); // Get file MIME type
 
-        $fileInDB = File::create(["path" => $path]);
+        $path = $file->store('uploads', 'public'); // Store file in 'public/uploads' directory
+
+        $fileInDB = File::create([
+            'name' => $originalName,
+            'size' => $size,
+            'type' => $type,
+            'path' => $path,
+        ]);
 
         return $fileInDB;
     }

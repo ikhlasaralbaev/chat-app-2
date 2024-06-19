@@ -11,5 +11,5 @@ class File extends Model
 
     protected $connection = "mysql";
 
-    protected $fillable = ["path"];
+    protected $fillable = ["path", "name", "size", "type"];
 }

@@ -51,7 +51,7 @@ class MessageService implements MessageServiceInterface {
         $message = Message::create($data);
 
 
-        $message->load(["createdBy", "room", "repliedMessage.createdBy", "replies"]);
+        $message->load(["createdBy", "room", "repliedMessage.createdBy", "replies", "file"]);
 
         // event for pusher, notification
         event(new ChatMessageEvent($message, $room["id"], "create_message"));

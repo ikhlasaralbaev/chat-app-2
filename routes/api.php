@@ -14,6 +14,7 @@ Route::prefix('/auth')->name("auth.")->group(function() {
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get("/profile", [AuthController::class, "getme"]);
+        Route::put("/profile", [AuthController::class, "update"]);
     });
 });
 

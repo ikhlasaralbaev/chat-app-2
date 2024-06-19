@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\Api\UserResource;
 use App\Http\Services\User\UserService as UserUserService;
 use App\Models\User;
@@ -61,5 +62,9 @@ class AuthController extends Controller
         $user = $this->userService->findById($request->user()->id);
 
         return UserResource::make($user);
+    }
+
+    public function update(UpdateProfileRequest $request) {
+        return $this->userService->updateProfile($request);
     }
 }

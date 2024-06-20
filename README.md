@@ -7,7 +7,7 @@ docker compose up --build -d
 OPEN THE php-cli bash
 
 ```sh {"id":"01J0QYG8NMDB9Z2XFNYHK53CTG"}
-docker compose exec -u 0 php-cli bash
+docker compose exec -u 0 php bash
 ```
 
 MIGRATE PROJECT
@@ -17,16 +17,11 @@ php artisan migrate:fresh --seed
 ```
 
 Default user
-<br />
 -- login: admin@gmail.com
-<br />
 -- password: password
 
 Real key, port, hosts in .env.example file.
 
-Project port: http://localhost:8080
-<br/> 
+Project port: http://localhost:8000
 Mongo express port: http://localhost:8082
-<br/> 
 Phpmyadmin port: http://localhost:8081
-<br/> 
